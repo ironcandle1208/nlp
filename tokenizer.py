@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 
 class SimpleTokenizer:
     def __init__(self):
@@ -21,11 +22,11 @@ class SimpleTokenizer:
     def tokenize(self, sentence):
         return [self.word2idx.get(word, 0) for word in sentence.split()]
 
-# 使用例
+def cos_sim(v1, v2):
+    return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+
 sentences = [
-    "空条承太郎 は ジョセフ・ジョースター の 孫 である",
-    "東方仗助 は ジョセフ・ジョースター の 隠し子 である",
-    "空条徐倫 は 空条承太郎 の 娘 である"
+    "apple orange banana grape"
 ]
 
 tokenizer = SimpleTokenizer()
@@ -50,3 +51,13 @@ for sentence in sentences:
     print(f"Sentence: {sentence}")
     print(f"Token IDs: {tokenized}")
     print(f"Embeddings:\n{embedded}\n")
+
+
+    for i in range(0,len(tokenized)-1,1):
+        vec_list1 = []
+        vec_list2 = []
+        for j in range(0,7,1):
+            vec_list1.append(embedded[i][j].item())
+            vec_list2.append(embedded[i+1][j].item())
+
+        print(f"cos_sim: {cos_sim(vec_list1,vec_list2)}")
